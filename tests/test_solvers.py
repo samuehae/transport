@@ -26,7 +26,7 @@ def test_numerov(a, b, q, fex):
     x, dx = np.linspace(a, b, n, retstep=True)
     
     # numerical solution
-    y_num = sol.numerov(q, fex(x[0]), fex(x[1]), dx)
+    y_num = sol.numerov(q, fex(x[0]), fex(x[1]), dx, full=False)
     
     # exact analytical solution
     y_ex = fex(x[-2:])

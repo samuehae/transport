@@ -9,7 +9,7 @@
 import numpy as np
 
 
-def numerov(q, y0, y1, dx):
+def numerov(q, y0, y1, dx, full):
     '''integrate ode of type y''(x) + q(x)*y(x) = 0.
     
     Parameters
@@ -21,6 +21,9 @@ def numerov(q, y0, y1, dx):
         initial values given by y0 = y(0) and y1 = y(dx).
     dx : scalar
         step size to discretize functions.
+    full : bool
+        return full solution y_0, y_1, ..., y_(n-1) or 
+        only the last two values y_(n-2), y_(n-1).
     '''
     
     # number of sampling points
@@ -35,9 +38,22 @@ def numerov(q, y0, y1, dx):
     b = 24 - 10*dx*dx * q
     
     
-    # calculate and return last two values
-    # iterate Numerov algorithm
-    for i in xrange(2, n):
-        y0, y1 = y1, (b[i-1]*y1 - a[i-2]*y0) / a[i]
+    if full:
+        # calculate and return full solution.
+        # extract more general type
+        y = np.empty(n, dtype=type(y0+y1))
+        y[0:2] = (y0, y1)
+        
+        # iterate Numerov algorithm
+        for i in xrange(2, n):
+            y[i] = (b[i-1]*y[i-1] - a[i-2]*y[i-2]) / a[i]
+        
+        return y
     
-    return y0, y1
+    else:
+        # calculate and return last two values.
+        # iterate Numerov algorithm
+        for i in xrange(2, n):
+            y0, y1 = y1, (b[i-1]*y1 - a[i-2]*y0) / a[i]
+        
+        return y0, y1

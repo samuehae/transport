@@ -76,7 +76,7 @@ def scatter(e, v, dx):
     
     # calculate last two values of wave function in right lead region. 
     # used to match to free propagation ansatz
-    y0, y1 = numerov(q, y0, y1, dx)
+    y0, y1 = numerov(q, y0, y1, dx, full=False)
     
     
     # match numerical solution with free propagation ansatz
