@@ -25,11 +25,14 @@ def test_numerov(a, b, q, fex):
     # sampling points
     x, dx = np.linspace(a, b, n, retstep=True)
     
-    # numerical solution
-    y_num = sol.numerov(q, fex(x[0]), fex(x[1]), dx, full=False)
+    # numerical solutions (full and partial)
+    y_num_full = sol.numerov(q, fex(x[0]), fex(x[1]), dx, full=True)
+    y_num_part = sol.numerov(q, fex(x[0]), fex(x[1]), dx, full=False)
     
-    # exact analytical solution
-    y_ex = fex(x[-2:])
+    # exact analytical solutions (full and partial)
+    y_ex_full = fex(x)
+    y_ex_part = fex(x[-2:])
     
-    # compare numerical and exact solutions
-    assert np.allclose(y_ex, y_num)
+    # compare numerical and exact solutions (full and partial)
+    assert np.allclose(y_ex_full, y_num_full)
+    assert np.allclose(y_ex_part, y_num_part)
