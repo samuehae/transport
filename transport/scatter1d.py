@@ -37,10 +37,9 @@ import numpy as np
 from transport.solvers import numerov
 
 
-def scatter(e, v, dx):
-    '''solves scattering problem for right incident particle. 
-    returns reflection and transmission amplitudes r and t 
-    (more details in module's docstring).
+def amplitudes(e, v, dx):
+    '''returns reflection and transmission amplitudes r and t for 
+    right incident particle (more details in module's docstring).
     
     Parameters
     ----------

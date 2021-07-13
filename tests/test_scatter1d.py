@@ -13,7 +13,7 @@ from transport import scatter1d
     (1.0, 10, 200), 
     (1.1, 10, 230), 
 ])
-def test_scatter_zero(e, l, n):
+def test_amplitudes_zero_potential(e, l, n):
     '''checks reflection and transmission amplitudes for zero potential.'''
     
     # expected scattering amplitudes for vanishing potential
@@ -27,7 +27,7 @@ def test_scatter_zero(e, l, n):
     x, dx = np.linspace(0, l, n, retstep=True)
     
     # numerical reflection and transmission amplitudes
-    r_num, t_num = scatter1d.scatter(e, v, dx)
+    r_num, t_num = scatter1d.amplitudes(e, v, dx)
     
     
     # compare numerical and analytical solutions
@@ -55,7 +55,7 @@ def test_scatter_zero(e, l, n):
     (1.5, 1.0, 10000), 
     (1.6, 1.0, 10000), 
 ])
-def test_scatter_rectangular_barrier(e, l, n):
+def test_amplitudes_rectangular_potential(e, l, n):
     '''checks reflection and transmission amplitudes for rectangular potential.'''
     
     # rectangular potential barrier
@@ -65,7 +65,7 @@ def test_scatter_rectangular_barrier(e, l, n):
     x, dx = np.linspace(0, l, n, retstep=True)
     
     # numerical reflection and transmission amplitudes
-    r_num, t_num = scatter1d.scatter(e, v, dx)
+    r_num, t_num = scatter1d.amplitudes(e, v, dx)
     
     # exact analytical reflection and transmission amplitudes
     r_ex, t_ex = rectangular_barrier(e, 1.0, l)
