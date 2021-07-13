@@ -89,3 +89,61 @@ def amplitudes(e, v, dx):
     
     # return reflection and transmission amplitude
     return c/d, b/d
+
+
+
+def wavefunction(e, v, dx):
+    '''returns wave function within scattering region for 
+    right incident particle (normalization d = 1).
+    
+    Parameters
+    ----------
+    e : scalar
+        dimensionless particle energy measured in hbar^2 / (2*m*s^2)
+    v : array-like
+        dimensionless potential within scattering region 
+        measured in hbar^2 / (2*m*s^2)
+    dx : scalar
+        step size to discretize potential and wave function. 
+        measured in arbitrary length s
+    '''
+    
+    
+    # number of sampling points
+    n = len(v)
+    
+    # convert array-like to array
+    v = np.asarray(v)
+    
+    # wave vector in lead regions
+    k = np.sqrt(e)
+    
+    # set up Schroedinger equation y''(x) + q(x)*y(x) = 0 with q(x) = e - v(x). 
+    # additional sampling points in each lead region used to set up initial 
+    # values and to match solution with free propagation ansatz
+    q = np.concatenate(((e, e), e-v, (e, e)))
+    
+    # initial values in left lead (x < 0)
+    # set parameter b = exp(-ik dx)
+    y0 = np.exp(1J*k*dx)    # y(x) at x = -2dx
+    y1 = 1.0                # y(x) at x = -dx
+    
+    
+    # calculate full wave function in scattering region 
+    # including two values on each side in the leads.
+    y = numerov(q, y0, y1, dx, full=True)
+    
+    
+    # extract last two values of wave function in right lead
+    y0, y1 = y[-2], y[-1]
+    
+    
+    # match numerical solution with free propagation ansatz
+    # to normalize wave function (d = 1)
+    det = np.exp(1J*k*dx) - np.exp(-1J*k*dx)
+    
+    d = (np.exp(1J*k*(n+1)*dx) * y0 - np.exp(1J*k*n*dx) * y1) / det
+    
+    # return wave function within scattering region
+    # remove concatenated points and normalize
+    return y[2:-2] / d
