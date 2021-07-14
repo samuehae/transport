@@ -97,7 +97,7 @@ def test_amplitudes_rectangular_potential(e, l, n):
     r_num, t_num = scatter1d.amplitudes(e, v, dx)
     
     # exact analytical reflection and transmission amplitudes
-    r_ex, t_ex = rectangular_barrier(e, 1.0, l)
+    r_ex, t_ex, _ = rectangular_barrier(e, 1.0, l, x)
     
     
     # compare numerical and analytical solutions
@@ -106,8 +106,47 @@ def test_amplitudes_rectangular_potential(e, l, n):
 
 
 
-def rectangular_barrier(e, v0, l):
-    '''exact reflection and transmission amplitudes for rectangular potential.'''
+@pytest.mark.parametrize(('e', 'l', 'n'), [
+    (0.1, 1.0, 10000), 
+    (0.2, 1.0, 10000), 
+    (0.3, 1.0, 10000), 
+    (0.4, 1.0, 10000), 
+    (0.5, 1.0, 10000), 
+    (0.6, 1.0, 10000), 
+    (0.7, 1.0, 10000), 
+    (0.8, 1.0, 10000), 
+    (0.9, 1.0, 10000), 
+    (1.0, 1.0, 10000), 
+    (1.1, 1.0, 10000), 
+    (1.2, 1.0, 10000), 
+    (1.3, 1.0, 10000), 
+    (1.4, 1.0, 10000), 
+    (1.5, 1.0, 10000), 
+    (1.6, 1.0, 10000), 
+])
+def test_wavefunction_rectangular_potential(e, l, n):
+    '''checks wave function for rectangular potential.'''
+    
+    # rectangular potential barrier
+    v = np.ones(n)
+    
+    # sampling points
+    x, dx = np.linspace(0, l, n, retstep=True)
+    
+    # numerical scattering wave function
+    y_num = scatter1d.wavefunction(e, v, dx)
+    
+    # exact analytical wave function
+    y_ex = rectangular_barrier(e, 1.0, l, x)[2]
+    
+    
+    # compare numerical and analytical solutions
+    assert np.allclose(y_num, y_ex, atol=1e-4)
+
+
+
+def rectangular_barrier(e, v0, l, x):
+    '''exact wave function and amplitudes for rectangular potential.'''
     
     # exact solution for right incident particle
     
@@ -117,8 +156,12 @@ def rectangular_barrier(e, v0, l):
         
         denominator = 2J + k0*l
         
+        # transmission and reflection amplitudes
         t = 2J * np.exp(-1J*k0*l) / denominator
         r = k0*l * np.exp(-2J*k0*l) / denominator
+        
+        # wave function inside scattering region
+        y = (2J + 2*k0*x) * np.exp(-1J*k0*l) / denominator
         
     else:
         # general case
@@ -127,8 +170,14 @@ def rectangular_barrier(e, v0, l):
         
         denominator = (k0+k1)**2 * np.exp(-1J*k1*l) - (k0-k1)**2 * np.exp(1J*k1*l)
         
+        # transmission and reflection amplitudes
         t = 4*k0*k1 * np.exp(-1J*k0*l) / denominator
         r = (k1*k1-k0*k0) * np.exp(-2J*k0*l) * \
             (np.exp(1J*k1*l) - np.exp(-1J*k1*l)) / denominator
+        
+        # wave function inside scattering region
+        beta0 = -2*k0*(k0-k1) * np.exp(-1J*k0*l) / denominator
+        beta1 = 2*k0*(k0+k1) * np.exp(-1J*k0*l) / denominator
+        y = beta0 * np.exp(1J*k1*x) + beta1 * np.exp(-1J*k1*x)
     
-    return r, t
+    return r, t, y
