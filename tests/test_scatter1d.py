@@ -36,6 +36,35 @@ def test_amplitudes_zero_potential(e, l, n):
 
 
 
+@pytest.mark.parametrize(('e', 'l', 'n'), [
+    (0.1, 10, 50), 
+    (0.2, 10, 100), 
+    (1.0, 10, 200), 
+    (1.1, 10, 230), 
+])
+def test_wavefunction_zero_potential(e, l, n):
+    '''checks scattering wave function for zero potential.'''
+    
+    # scattering potential
+    v = np.zeros(n)
+    
+    # sampling points
+    x, dx = np.linspace(0, l, n, retstep=True)
+    
+    # numerical scattering wave function
+    y_num = scatter1d.wavefunction(e, v, dx)
+    
+    
+    # exact analytical wave function
+    k = np.sqrt(e) # wave vector
+    y_ex = np.exp(-1J*k*x)
+    
+    
+    # compare numerical and analytical solutions
+    assert np.allclose(y_num, y_ex)
+
+
+
 
 @pytest.mark.parametrize(('e', 'l', 'n'), [
     (0.1, 1.0, 10000), 
