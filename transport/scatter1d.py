@@ -17,17 +17,19 @@ v(x) : dimensionless potential measured in hbar^2 / (2*m*s^2).
 
 Free propagation ansatz
 -----------------------
-General ansatz (dimensionless wave vector k = sqrt(e))
-y(x) = a*exp(ikx) + b*exp(-ikx) for x < 0
-y(x) = c*exp(ikx) + d*exp(-ikx) for x > l
+dimensionless wave vector k = sqrt(e) measured in 1/s
 
+Left (x < 0) incident particle
+y(x) = a*exp(ikx) + b*exp(-ikx) for x < 0
+y(x) = c*exp(ikx) for x > l
 
 Right (x > l) incident particle
-y(x) = b*exp(-ikx) for x < 0
-y(x) = c*exp(ikx) + d*exp(-ikx) for x > l
+y(x) = a*exp(-ikx) + b*exp(ikx) for x > l
+y(x) = c*exp(-ikx) for x < 0
 
-reflection amplitude r = c/d
-transmission amplitude t = b/d
+For both incidence directions
+reflection amplitude r = b/a
+transmission amplitude t = c/a
 '''
 
 
@@ -37,9 +39,8 @@ import numpy as np
 from transport.solvers import numerov
 
 
-def amplitudes(e, v, dx):
-    '''returns reflection and transmission amplitudes r and t for 
-    right incident particle (more details in module's docstring).
+def amplitudes(e, v, dx, left):
+    '''returns reflection and transmission amplitudes r and t.
     
     Parameters
     ----------
@@ -51,6 +52,9 @@ def amplitudes(e, v, dx):
     dx : scalar
         step size to discretize potential and wave function. 
         measured in arbitrary length s
+    left : bool
+        solves scattering problem for left (right) incident particle 
+        if argument is true (false).
     '''
     
     # number of sampling points
@@ -59,42 +63,66 @@ def amplitudes(e, v, dx):
     # convert array-like to array
     v = np.asarray(v)
     
+    # wave vector in lead regions
+    k = np.sqrt(e)
+    
+    
     # set up Schroedinger equation y''(x) + q(x)*y(x) = 0 with q(x) = e - v(x). 
     # additional sampling points in each lead region used to set up initial 
     # values and to match solution with free propagation ansatz
     q = np.concatenate(((e, e), e-v, (e, e)))
     
-    # wave vector in lead regions
-    k = np.sqrt(e)
     
-    # initial values in left lead (x < 0)
-    # set parameter b = exp(-ik dx)
-    y0 = np.exp(1J*k*dx)    # y(x) at x = -2dx
-    y1 = 1.0                # y(x) at x = -dx
+    if left:
+        # case: particle is incident from left lead
+        # propagate initial values backwards (from right to left lead)
+        q = q[::-1]
+    
+    # else:
+        # case: particle is incident from right lead
+        # propagate initial values forwards (from left to right lead)
+        # use vector q unmodified
     
     
-    # calculate last two values of wave function in right lead region. 
-    # used to match to free propagation ansatz
+    
+    # initial values made independent of particle moving direction
+    
+    # case: particle incident from left lead
+    # initial values in right lead with c = exp(-ik n*dx)
+    
+    # case: particle incident from right lead
+    # initial values in left lead with c = exp(-ik dx)
+    
+    y0 = np.exp(1J*k*dx)
+    y1 = 1.0
+    
+    
+    # integrate Schroedinger equation forward (backward) in space. 
+    # calculate last two values of wave function in right (left) lead
     y0, y1 = numerov(q, y0, y1, dx, full=False)
     
     
     # match numerical solution with free propagation ansatz
     det = np.exp(1J*k*dx) - np.exp(-1J*k*dx)
     
-    d = (np.exp(1J*k*(n+1)*dx) * y0 - np.exp(1J*k*n*dx) * y1) / det
-    c = (-np.exp(-1J*k*(n+1)*dx) * y0 + np.exp(-1J*k*n*dx) * y1) / det
+    if left:
+        a = (np.exp(2J*k*dx) * y0 - np.exp(1J*k*dx) * y1) / det
+        b = (-np.exp(-2J*k*dx) * y0 + np.exp(-1J*k*dx) * y1) / det
+        c = np.exp(-1J*k*n*dx)
+        
+    else:
+        a = (np.exp(1J*k*(n+1)*dx) * y0 - np.exp(1J*k*n*dx) * y1) / det
+        b = (-np.exp(-1J*k*(n+1)*dx) * y0 + np.exp(-1J*k*n*dx) * y1) / det
+        c = np.exp(-1J*k*dx)
     
-    b = np.exp(-1J*k*dx)
     
-    
-    # return reflection and transmission amplitude
-    return c/d, b/d
+    # return reflection and transmission amplitudes
+    return b/a, c/a
 
 
 
-def wavefunction(e, v, dx):
-    '''returns wave function within scattering region for 
-    right incident particle (normalization d = 1).
+def wavefunction(e, v, dx, left):
+    '''returns wave function within scattering region (normalization a = 1).
     
     Parameters
     ----------
@@ -106,6 +134,9 @@ def wavefunction(e, v, dx):
     dx : scalar
         step size to discretize potential and wave function. 
         measured in arbitrary length s
+    left : bool
+        solves scattering problem for left (right) incident particle 
+        if argument is true (false).
     '''
     
     
@@ -118,32 +149,59 @@ def wavefunction(e, v, dx):
     # wave vector in lead regions
     k = np.sqrt(e)
     
+    
     # set up Schroedinger equation y''(x) + q(x)*y(x) = 0 with q(x) = e - v(x). 
     # additional sampling points in each lead region used to set up initial 
     # values and to match solution with free propagation ansatz
     q = np.concatenate(((e, e), e-v, (e, e)))
     
-    # initial values in left lead (x < 0)
-    # set parameter b = exp(-ik dx)
-    y0 = np.exp(1J*k*dx)    # y(x) at x = -2dx
-    y1 = 1.0                # y(x) at x = -dx
+    
+    if left:
+        # case: particle is incident from left lead
+        # propagate initial values backwards (from right to left lead)
+        q = q[::-1]
+    
+    # else:
+        # case: particle is incident from right lead
+        # propagate initial values forwards (from left to right lead)
+        # use vector q unmodified
+    
+    
+    
+    # initial values made independent of particle moving direction
+    
+    # case: particle incident from left lead
+    # initial values in right lead with c = exp(-ik n*dx)
+    
+    # case: particle incident from right lead
+    # initial values in left lead with c = exp(-ik dx)
+    
+    y0 = np.exp(1J*k*dx)
+    y1 = 1.0
     
     
     # calculate full wave function in scattering region 
     # including two values on each side in the leads.
     y = numerov(q, y0, y1, dx, full=True)
     
-    
-    # extract last two values of wave function in right lead
+    # extract last two values of wave function in right (left) lead
     y0, y1 = y[-2], y[-1]
     
     
+    # reverse wave function if propagated backwards
+    if left:
+        y = y[::-1]
+    
+    
     # match numerical solution with free propagation ansatz
-    # to normalize wave function (d = 1)
+    # to normalize wave function (normalization a = 1)
     det = np.exp(1J*k*dx) - np.exp(-1J*k*dx)
     
-    d = (np.exp(1J*k*(n+1)*dx) * y0 - np.exp(1J*k*n*dx) * y1) / det
+    if left:
+        a = (np.exp(2J*k*dx) * y0 - np.exp(1J*k*dx) * y1) / det
+    else:
+        a = (np.exp(1J*k*(n+1)*dx) * y0 - np.exp(1J*k*n*dx) * y1) / det
     
     # return wave function within scattering region
     # remove concatenated points and normalize
-    return y[2:-2] / d
+    return y[2:-2] / a

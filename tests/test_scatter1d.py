@@ -27,7 +27,7 @@ def test_amplitudes_zero_potential(e, l, n):
     x, dx = np.linspace(0, l, n, retstep=True)
     
     # numerical reflection and transmission amplitudes
-    r_num, t_num = scatter1d.amplitudes(e, v, dx)
+    r_num, t_num = scatter1d.amplitudes(e, v, dx, left=False)
     
     
     # compare numerical and analytical solutions
@@ -52,8 +52,7 @@ def test_wavefunction_zero_potential(e, l, n):
     x, dx = np.linspace(0, l, n, retstep=True)
     
     # numerical scattering wave function
-    y_num = scatter1d.wavefunction(e, v, dx)
-    
+    y_num = scatter1d.wavefunction(e, v, dx, left=False)
     
     # exact analytical wave function
     k = np.sqrt(e) # wave vector
@@ -94,7 +93,7 @@ def test_amplitudes_rectangular_potential(e, l, n):
     x, dx = np.linspace(0, l, n, retstep=True)
     
     # numerical reflection and transmission amplitudes
-    r_num, t_num = scatter1d.amplitudes(e, v, dx)
+    r_num, t_num = scatter1d.amplitudes(e, v, dx, left=False)
     
     # exact analytical reflection and transmission amplitudes
     r_ex, t_ex, _ = rectangular_barrier(e, 1.0, l, x)
@@ -134,7 +133,7 @@ def test_wavefunction_rectangular_potential(e, l, n):
     x, dx = np.linspace(0, l, n, retstep=True)
     
     # numerical scattering wave function
-    y_num = scatter1d.wavefunction(e, v, dx)
+    y_num = scatter1d.wavefunction(e, v, dx, left=False)
     
     # exact analytical wave function
     y_ex = rectangular_barrier(e, 1.0, l, x)[2]
