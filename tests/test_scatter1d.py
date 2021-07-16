@@ -7,13 +7,13 @@ from transport import scatter1d
 
 
 
-@pytest.mark.parametrize(('e', 'l', 'n'), [
-    (0.1, 10, 50), 
-    (0.2, 10, 100), 
-    (1.0, 10, 200), 
-    (1.1, 10, 230), 
+@pytest.mark.parametrize(('e', 'l', 'n', 'left'), [
+    (0.1, 10, 50, False), (0.1, 10, 50, True), 
+    (0.2, 10, 100, False), (0.2, 10, 100, True), 
+    (1.0, 10, 200, False), (1.0, 10, 200, True), 
+    (1.1, 10, 230, False), (1.1, 10, 230, True), 
 ])
-def test_amplitudes_zero_potential(e, l, n):
+def test_amplitudes_zero_potential(e, l, n, left):
     '''checks reflection and transmission amplitudes for zero potential.'''
     
     # expected scattering amplitudes for vanishing potential
@@ -27,7 +27,7 @@ def test_amplitudes_zero_potential(e, l, n):
     x, dx = np.linspace(0, l, n, retstep=True)
     
     # numerical reflection and transmission amplitudes
-    r_num, t_num = scatter1d.amplitudes(e, v, dx, left=False)
+    r_num, t_num = scatter1d.amplitudes(e, v, dx, left)
     
     
     # compare numerical and analytical solutions
@@ -36,13 +36,13 @@ def test_amplitudes_zero_potential(e, l, n):
 
 
 
-@pytest.mark.parametrize(('e', 'l', 'n'), [
-    (0.1, 10, 50), 
-    (0.2, 10, 100), 
-    (1.0, 10, 200), 
-    (1.1, 10, 230), 
+@pytest.mark.parametrize(('e', 'l', 'n', 'left'), [
+    (0.1, 10, 50, False), (0.1, 10, 50, True), 
+    (0.2, 10, 100, False), (0.2, 10, 100, True), 
+    (1.0, 10, 200, False), (1.0, 10, 200, True), 
+    (1.1, 10, 230, False), (1.1, 10, 230, True), 
 ])
-def test_wavefunction_zero_potential(e, l, n):
+def test_wavefunction_zero_potential(e, l, n, left):
     '''checks scattering wave function for zero potential.'''
     
     # scattering potential
@@ -52,11 +52,14 @@ def test_wavefunction_zero_potential(e, l, n):
     x, dx = np.linspace(0, l, n, retstep=True)
     
     # numerical scattering wave function
-    y_num = scatter1d.wavefunction(e, v, dx, left=False)
+    y_num = scatter1d.wavefunction(e, v, dx, left)
     
     # exact analytical wave function
     k = np.sqrt(e) # wave vector
-    y_ex = np.exp(-1J*k*x)
+    if left:
+        y_ex = np.exp(1J*k*x)
+    else:
+        y_ex = np.exp(-1J*k*x)
     
     
     # compare numerical and analytical solutions
@@ -65,25 +68,25 @@ def test_wavefunction_zero_potential(e, l, n):
 
 
 
-@pytest.mark.parametrize(('e', 'l', 'n'), [
-    (0.1, 1.0, 10000), 
-    (0.2, 1.0, 10000), 
-    (0.3, 1.0, 10000), 
-    (0.4, 1.0, 10000), 
-    (0.5, 1.0, 10000), 
-    (0.6, 1.0, 10000), 
-    (0.7, 1.0, 10000), 
-    (0.8, 1.0, 10000), 
-    (0.9, 1.0, 10000), 
-    (1.0, 1.0, 10000), 
-    (1.1, 1.0, 10000), 
-    (1.2, 1.0, 10000), 
-    (1.3, 1.0, 10000), 
-    (1.4, 1.0, 10000), 
-    (1.5, 1.0, 10000), 
-    (1.6, 1.0, 10000), 
+@pytest.mark.parametrize(('e', 'l', 'n', 'left'), [
+    (0.1, 1.0, 10000, False), (0.1, 1.0, 10000, True), 
+    (0.2, 1.0, 10000, False), (0.2, 1.0, 10000, True), 
+    (0.3, 1.0, 10000, False), (0.3, 1.0, 10000, True), 
+    (0.4, 1.0, 10000, False), (0.4, 1.0, 10000, True), 
+    (0.5, 1.0, 10000, False), (0.5, 1.0, 10000, True), 
+    (0.6, 1.0, 10000, False), (0.6, 1.0, 10000, True), 
+    (0.7, 1.0, 10000, False), (0.7, 1.0, 10000, True), 
+    (0.8, 1.0, 10000, False), (0.8, 1.0, 10000, True), 
+    (0.9, 1.0, 10000, False), (0.9, 1.0, 10000, True), 
+    (1.0, 1.0, 10000, False), (1.0, 1.0, 10000, True), 
+    (1.1, 1.0, 10000, False), (1.1, 1.0, 10000, True), 
+    (1.2, 1.0, 10000, False), (1.2, 1.0, 10000, True), 
+    (1.3, 1.0, 10000, False), (1.3, 1.0, 10000, True), 
+    (1.4, 1.0, 10000, False), (1.4, 1.0, 10000, True), 
+    (1.5, 1.0, 10000, False), (1.5, 1.0, 10000, True), 
+    (1.6, 1.0, 10000, False), (1.6, 1.0, 10000, True), 
 ])
-def test_amplitudes_rectangular_potential(e, l, n):
+def test_amplitudes_rectangular_potential(e, l, n, left):
     '''checks reflection and transmission amplitudes for rectangular potential.'''
     
     # rectangular potential barrier
@@ -93,10 +96,10 @@ def test_amplitudes_rectangular_potential(e, l, n):
     x, dx = np.linspace(0, l, n, retstep=True)
     
     # numerical reflection and transmission amplitudes
-    r_num, t_num = scatter1d.amplitudes(e, v, dx, left=False)
+    r_num, t_num = scatter1d.amplitudes(e, v, dx, left)
     
     # exact analytical reflection and transmission amplitudes
-    r_ex, t_ex, _ = rectangular_barrier(e, 1.0, l, x)
+    r_ex, t_ex, _ = rectangular_barrier(e, 1.0, l, x, left)
     
     
     # compare numerical and analytical solutions
@@ -105,25 +108,25 @@ def test_amplitudes_rectangular_potential(e, l, n):
 
 
 
-@pytest.mark.parametrize(('e', 'l', 'n'), [
-    (0.1, 1.0, 10000), 
-    (0.2, 1.0, 10000), 
-    (0.3, 1.0, 10000), 
-    (0.4, 1.0, 10000), 
-    (0.5, 1.0, 10000), 
-    (0.6, 1.0, 10000), 
-    (0.7, 1.0, 10000), 
-    (0.8, 1.0, 10000), 
-    (0.9, 1.0, 10000), 
-    (1.0, 1.0, 10000), 
-    (1.1, 1.0, 10000), 
-    (1.2, 1.0, 10000), 
-    (1.3, 1.0, 10000), 
-    (1.4, 1.0, 10000), 
-    (1.5, 1.0, 10000), 
-    (1.6, 1.0, 10000), 
+@pytest.mark.parametrize(('e', 'l', 'n', 'left'), [
+    (0.1, 1.0, 10000, False), (0.1, 1.0, 10000, True), 
+    (0.2, 1.0, 10000, False), (0.2, 1.0, 10000, True), 
+    (0.3, 1.0, 10000, False), (0.3, 1.0, 10000, True), 
+    (0.4, 1.0, 10000, False), (0.4, 1.0, 10000, True), 
+    (0.5, 1.0, 10000, False), (0.5, 1.0, 10000, True), 
+    (0.6, 1.0, 10000, False), (0.6, 1.0, 10000, True), 
+    (0.7, 1.0, 10000, False), (0.7, 1.0, 10000, True), 
+    (0.8, 1.0, 10000, False), (0.8, 1.0, 10000, True), 
+    (0.9, 1.0, 10000, False), (0.9, 1.0, 10000, True), 
+    (1.0, 1.0, 10000, False), (1.0, 1.0, 10000, True), 
+    (1.1, 1.0, 10000, False), (1.1, 1.0, 10000, True), 
+    (1.2, 1.0, 10000, False), (1.2, 1.0, 10000, True), 
+    (1.3, 1.0, 10000, False), (1.3, 1.0, 10000, True), 
+    (1.4, 1.0, 10000, False), (1.4, 1.0, 10000, True), 
+    (1.5, 1.0, 10000, False), (1.5, 1.0, 10000, True), 
+    (1.6, 1.0, 10000, False), (1.6, 1.0, 10000, True), 
 ])
-def test_wavefunction_rectangular_potential(e, l, n):
+def test_wavefunction_rectangular_potential(e, l, n, left):
     '''checks wave function for rectangular potential.'''
     
     # rectangular potential barrier
@@ -133,10 +136,10 @@ def test_wavefunction_rectangular_potential(e, l, n):
     x, dx = np.linspace(0, l, n, retstep=True)
     
     # numerical scattering wave function
-    y_num = scatter1d.wavefunction(e, v, dx, left=False)
+    y_num = scatter1d.wavefunction(e, v, dx, left)
     
     # exact analytical wave function
-    y_ex = rectangular_barrier(e, 1.0, l, x)[2]
+    y_ex = rectangular_barrier(e, 1.0, l, x, left)[2]
     
     
     # compare numerical and analytical solutions
@@ -144,10 +147,9 @@ def test_wavefunction_rectangular_potential(e, l, n):
 
 
 
-def rectangular_barrier(e, v0, l, x):
+def rectangular_barrier(e, v0, l, x, left):
     '''exact wave function and amplitudes for rectangular potential.'''
     
-    # exact solution for right incident particle
     
     if np.isclose(e, v0):
         # limiting case
@@ -155,12 +157,21 @@ def rectangular_barrier(e, v0, l, x):
         
         denominator = 2J + k0*l
         
-        # transmission and reflection amplitudes
+        
+        # transmission and reflection amplitudes (right incident)
         t = 2J * np.exp(-1J*k0*l) / denominator
         r = k0*l * np.exp(-2J*k0*l) / denominator
         
-        # wave function inside scattering region
-        y = (2J + 2*k0*x) * np.exp(-1J*k0*l) / denominator
+        if left:
+            # correct reflection amplitude
+            r *= np.exp(2J*k0*l)
+            
+            # wave function inside scattering region
+            y = (2J - 2*k0*(x-l)) / denominator
+            
+        else:
+            # wave function inside scattering region
+            y = (2J + 2*k0*x) * np.exp(-1J*k0*l) / denominator
         
     else:
         # general case
@@ -169,14 +180,27 @@ def rectangular_barrier(e, v0, l, x):
         
         denominator = (k0+k1)**2 * np.exp(-1J*k1*l) - (k0-k1)**2 * np.exp(1J*k1*l)
         
-        # transmission and reflection amplitudes
+        
+        # transmission and reflection amplitudes (right incident)
         t = 4*k0*k1 * np.exp(-1J*k0*l) / denominator
         r = (k1*k1-k0*k0) * np.exp(-2J*k0*l) * \
             (np.exp(1J*k1*l) - np.exp(-1J*k1*l)) / denominator
         
+        if left:
+            # correct reflection amplitude
+            r *= np.exp(2J*k0*l)
+            
+            # coefficients to calculate wave function inside scattering region
+            beta0 = 2*k0*(k0+k1) * np.exp(-1J*k1*l) / denominator
+            beta1 = -2*k0*(k0-k1) * np.exp(1J*k1*l) / denominator
+            
+        else:
+            # coefficients to calculate wave function inside scattering region
+            beta0 = -2*k0*(k0-k1) * np.exp(-1J*k0*l) / denominator
+            beta1 = 2*k0*(k0+k1) * np.exp(-1J*k0*l) / denominator
+        
+        
         # wave function inside scattering region
-        beta0 = -2*k0*(k0-k1) * np.exp(-1J*k0*l) / denominator
-        beta1 = 2*k0*(k0+k1) * np.exp(-1J*k0*l) / denominator
         y = beta0 * np.exp(1J*k1*x) + beta1 * np.exp(-1J*k1*x)
     
     return r, t, y
