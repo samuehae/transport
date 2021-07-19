@@ -44,7 +44,7 @@ def amplitudes(e, v, dx, left):
     
     Parameters
     ----------
-    e : scalar
+    e : scalar or array-like
         dimensionless particle energy measured in hbar^2 / (2*m*s^2)
     v : array-like
         dimensionless potential within scattering region 
@@ -60,17 +60,20 @@ def amplitudes(e, v, dx, left):
     # number of sampling points
     n = len(v)
     
-    # convert array-like to array
-    v = np.asarray(v)
+    # additional sampling points in each lead region used to set up initial 
+    # values and to match solution with free propagation ansatz
+    v = np.concatenate(((0, 0), v, (0, 0)))
     
     # wave vector in lead regions
+    # scalar or array-like as given by energy e
     k = np.sqrt(e)
     
     
     # set up Schroedinger equation y''(x) + q(x)*y(x) = 0 with q(x) = e - v(x). 
-    # additional sampling points in each lead region used to set up initial 
-    # values and to match solution with free propagation ansatz
-    q = np.concatenate(((e, e), e-v, (e, e)))
+    # speeds up calculation if energy e is array-like, as numerov solves 
+    # scattering problems at different energies in a vectorized way
+    # meaning of dimensions: (position, energy)
+    q = e - v[:, np.newaxis]
     
     
     if left:
