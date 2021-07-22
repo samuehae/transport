@@ -7,6 +7,7 @@
 
 
 import numpy as np
+from builtins import range
 
 
 def numerov(q, y0, y1, dx, full):
@@ -45,7 +46,7 @@ def numerov(q, y0, y1, dx, full):
         y[0:2] = (y0, y1)
         
         # iterate Numerov algorithm
-        for i in xrange(2, n):
+        for i in range(2, n):
             y[i] = (b[i-1]*y[i-1] - a[i-2]*y[i-2]) / a[i]
         
         return y
@@ -53,7 +54,7 @@ def numerov(q, y0, y1, dx, full):
     else:
         # calculate and return last two values.
         # iterate Numerov algorithm
-        for i in xrange(2, n):
+        for i in range(2, n):
             y0, y1 = y1, (b[i-1]*y1 - a[i-2]*y0) / a[i]
         
         return y0, y1
