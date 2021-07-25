@@ -7,12 +7,11 @@ from transport import scatter1d
 
 
 
-@pytest.mark.parametrize(('e', 'l', 'n', 'left'), [
-    (0.1, 10, 50, False), (0.1, 10, 50, True), 
-    (0.2, 10, 100, False), (0.2, 10, 100, True), 
-    (1.0, 10, 200, False), (1.0, 10, 200, True), 
-    (1.1, 10, 230, False), (1.1, 10, 230, True), 
-])
+@pytest.mark.parametrize('e', [0.1, 0.2, 1.0, 1.1])
+@pytest.mark.parametrize('l', [10, ])
+@pytest.mark.parametrize('n', [230, ])
+@pytest.mark.parametrize('left', [False, True])
+
 def test_amplitudes_zero_potential(e, l, n, left):
     '''checks reflection and transmission amplitudes for zero potential.'''
     
@@ -36,12 +35,11 @@ def test_amplitudes_zero_potential(e, l, n, left):
 
 
 
-@pytest.mark.parametrize(('e', 'l', 'n', 'left'), [
-    (0.1, 10, 50, False), (0.1, 10, 50, True), 
-    (0.2, 10, 100, False), (0.2, 10, 100, True), 
-    (1.0, 10, 200, False), (1.0, 10, 200, True), 
-    (1.1, 10, 230, False), (1.1, 10, 230, True), 
-])
+@pytest.mark.parametrize('e', [0.1, 0.2, 1.0, 1.1])
+@pytest.mark.parametrize('l', [10, ])
+@pytest.mark.parametrize('n', [230, ])
+@pytest.mark.parametrize('left', [False, True])
+
 def test_wavefunction_zero_potential(e, l, n, left):
     '''checks scattering wave function for zero potential.'''
     
@@ -68,61 +66,12 @@ def test_wavefunction_zero_potential(e, l, n, left):
 
 
 
-@pytest.mark.parametrize(('e', 'v0', 'l', 'n', 'left'), [
-    # real potential
-    (0.1, 1.0, 1.0, 10000, False), (0.1, 1.0, 1.0, 10000, True), 
-    (0.2, 1.0, 1.0, 10000, False), (0.2, 1.0, 1.0, 10000, True), 
-    (0.3, 1.0, 1.0, 10000, False), (0.3, 1.0, 1.0, 10000, True), 
-    (0.4, 1.0, 1.0, 10000, False), (0.4, 1.0, 1.0, 10000, True), 
-    (0.5, 1.0, 1.0, 10000, False), (0.5, 1.0, 1.0, 10000, True), 
-    (0.6, 1.0, 1.0, 10000, False), (0.6, 1.0, 1.0, 10000, True), 
-    (0.7, 1.0, 1.0, 10000, False), (0.7, 1.0, 1.0, 10000, True), 
-    (0.8, 1.0, 1.0, 10000, False), (0.8, 1.0, 1.0, 10000, True), 
-    (0.9, 1.0, 1.0, 10000, False), (0.9, 1.0, 1.0, 10000, True), 
-    (1.0, 1.0, 1.0, 10000, False), (1.0, 1.0, 1.0, 10000, True), 
-    (1.1, 1.0, 1.0, 10000, False), (1.1, 1.0, 1.0, 10000, True), 
-    (1.2, 1.0, 1.0, 10000, False), (1.2, 1.0, 1.0, 10000, True), 
-    (1.3, 1.0, 1.0, 10000, False), (1.3, 1.0, 1.0, 10000, True), 
-    (1.4, 1.0, 1.0, 10000, False), (1.4, 1.0, 1.0, 10000, True), 
-    (1.5, 1.0, 1.0, 10000, False), (1.5, 1.0, 1.0, 10000, True), 
-    (1.6, 1.0, 1.0, 10000, False), (1.6, 1.0, 1.0, 10000, True), 
-    
-    # imaginary potential
-    (0.1, -1j, 1.0, 10000, False), (0.1, -1j, 1.0, 10000, True), 
-    (0.2, -1j, 1.0, 10000, False), (0.2, -1j, 1.0, 10000, True), 
-    (0.3, -1j, 1.0, 10000, False), (0.3, -1j, 1.0, 10000, True), 
-    (0.4, -1j, 1.0, 10000, False), (0.4, -1j, 1.0, 10000, True), 
-    (0.5, -1j, 1.0, 10000, False), (0.5, -1j, 1.0, 10000, True), 
-    (0.6, -1j, 1.0, 10000, False), (0.6, -1j, 1.0, 10000, True), 
-    (0.7, -1j, 1.0, 10000, False), (0.7, -1j, 1.0, 10000, True), 
-    (0.8, -1j, 1.0, 10000, False), (0.8, -1j, 1.0, 10000, True), 
-    (0.9, -1j, 1.0, 10000, False), (0.9, -1j, 1.0, 10000, True), 
-    (1.0, -1j, 1.0, 10000, False), (1.0, -1j, 1.0, 10000, True), 
-    (1.1, -1j, 1.0, 10000, False), (1.1, -1j, 1.0, 10000, True), 
-    (1.2, -1j, 1.0, 10000, False), (1.2, -1j, 1.0, 10000, True), 
-    (1.3, -1j, 1.0, 10000, False), (1.3, -1j, 1.0, 10000, True), 
-    (1.4, -1j, 1.0, 10000, False), (1.4, -1j, 1.0, 10000, True), 
-    (1.5, -1j, 1.0, 10000, False), (1.5, -1j, 1.0, 10000, True), 
-    (1.6, -1j, 1.0, 10000, False), (1.6, -1j, 1.0, 10000, True), 
-    
-    # complex potential
-    (0.1, 1.0-0.5j, 1.0, 10000, False), (0.1, 1.0-0.5j, 1.0, 10000, True), 
-    (0.2, 1.0-0.5j, 1.0, 10000, False), (0.2, 1.0-0.5j, 1.0, 10000, True), 
-    (0.3, 1.0-0.5j, 1.0, 10000, False), (0.3, 1.0-0.5j, 1.0, 10000, True), 
-    (0.4, 1.0-0.5j, 1.0, 10000, False), (0.4, 1.0-0.5j, 1.0, 10000, True), 
-    (0.5, 1.0-0.5j, 1.0, 10000, False), (0.5, 1.0-0.5j, 1.0, 10000, True), 
-    (0.6, 1.0-0.5j, 1.0, 10000, False), (0.6, 1.0-0.5j, 1.0, 10000, True), 
-    (0.7, 1.0-0.5j, 1.0, 10000, False), (0.7, 1.0-0.5j, 1.0, 10000, True), 
-    (0.8, 1.0-0.5j, 1.0, 10000, False), (0.8, 1.0-0.5j, 1.0, 10000, True), 
-    (0.9, 1.0-0.5j, 1.0, 10000, False), (0.9, 1.0-0.5j, 1.0, 10000, True), 
-    (1.0, 1.0-0.5j, 1.0, 10000, False), (1.0, 1.0-0.5j, 1.0, 10000, True), 
-    (1.1, 1.0-0.5j, 1.0, 10000, False), (1.1, 1.0-0.5j, 1.0, 10000, True), 
-    (1.2, 1.0-0.5j, 1.0, 10000, False), (1.2, 1.0-0.5j, 1.0, 10000, True), 
-    (1.3, 1.0-0.5j, 1.0, 10000, False), (1.3, 1.0-0.5j, 1.0, 10000, True), 
-    (1.4, 1.0-0.5j, 1.0, 10000, False), (1.4, 1.0-0.5j, 1.0, 10000, True), 
-    (1.5, 1.0-0.5j, 1.0, 10000, False), (1.5, 1.0-0.5j, 1.0, 10000, True), 
-    (1.6, 1.0-0.5j, 1.0, 10000, False), (1.6, 1.0-0.5j, 1.0, 10000, True), 
-])
+@pytest.mark.parametrize('e', np.arange(0.1, 1.7, 0.1))
+@pytest.mark.parametrize('v0', [1.0, -1j, 1.0-0.5j])
+@pytest.mark.parametrize('l', [1.0, ])
+@pytest.mark.parametrize('n', [10000, ])
+@pytest.mark.parametrize('left', [False, True])
+
 def test_amplitudes_rectangular_potential(e, v0, l, n, left):
     '''checks reflection and transmission amplitudes for rectangular potential.'''
     
@@ -144,61 +93,12 @@ def test_amplitudes_rectangular_potential(e, v0, l, n, left):
 
 
 
-@pytest.mark.parametrize(('e', 'v0', 'l', 'n', 'left'), [
-    # real potential
-    (0.1, 1.0, 1.0, 10000, False), (0.1, 1.0, 1.0, 10000, True), 
-    (0.2, 1.0, 1.0, 10000, False), (0.2, 1.0, 1.0, 10000, True), 
-    (0.3, 1.0, 1.0, 10000, False), (0.3, 1.0, 1.0, 10000, True), 
-    (0.4, 1.0, 1.0, 10000, False), (0.4, 1.0, 1.0, 10000, True), 
-    (0.5, 1.0, 1.0, 10000, False), (0.5, 1.0, 1.0, 10000, True), 
-    (0.6, 1.0, 1.0, 10000, False), (0.6, 1.0, 1.0, 10000, True), 
-    (0.7, 1.0, 1.0, 10000, False), (0.7, 1.0, 1.0, 10000, True), 
-    (0.8, 1.0, 1.0, 10000, False), (0.8, 1.0, 1.0, 10000, True), 
-    (0.9, 1.0, 1.0, 10000, False), (0.9, 1.0, 1.0, 10000, True), 
-    (1.0, 1.0, 1.0, 10000, False), (1.0, 1.0, 1.0, 10000, True), 
-    (1.1, 1.0, 1.0, 10000, False), (1.1, 1.0, 1.0, 10000, True), 
-    (1.2, 1.0, 1.0, 10000, False), (1.2, 1.0, 1.0, 10000, True), 
-    (1.3, 1.0, 1.0, 10000, False), (1.3, 1.0, 1.0, 10000, True), 
-    (1.4, 1.0, 1.0, 10000, False), (1.4, 1.0, 1.0, 10000, True), 
-    (1.5, 1.0, 1.0, 10000, False), (1.5, 1.0, 1.0, 10000, True), 
-    (1.6, 1.0, 1.0, 10000, False), (1.6, 1.0, 1.0, 10000, True), 
-    
-    # imaginary potential
-    (0.1, -1j, 1.0, 10000, False), (0.1, -1j, 1.0, 10000, True), 
-    (0.2, -1j, 1.0, 10000, False), (0.2, -1j, 1.0, 10000, True), 
-    (0.3, -1j, 1.0, 10000, False), (0.3, -1j, 1.0, 10000, True), 
-    (0.4, -1j, 1.0, 10000, False), (0.4, -1j, 1.0, 10000, True), 
-    (0.5, -1j, 1.0, 10000, False), (0.5, -1j, 1.0, 10000, True), 
-    (0.6, -1j, 1.0, 10000, False), (0.6, -1j, 1.0, 10000, True), 
-    (0.7, -1j, 1.0, 10000, False), (0.7, -1j, 1.0, 10000, True), 
-    (0.8, -1j, 1.0, 10000, False), (0.8, -1j, 1.0, 10000, True), 
-    (0.9, -1j, 1.0, 10000, False), (0.9, -1j, 1.0, 10000, True), 
-    (1.0, -1j, 1.0, 10000, False), (1.0, -1j, 1.0, 10000, True), 
-    (1.1, -1j, 1.0, 10000, False), (1.1, -1j, 1.0, 10000, True), 
-    (1.2, -1j, 1.0, 10000, False), (1.2, -1j, 1.0, 10000, True), 
-    (1.3, -1j, 1.0, 10000, False), (1.3, -1j, 1.0, 10000, True), 
-    (1.4, -1j, 1.0, 10000, False), (1.4, -1j, 1.0, 10000, True), 
-    (1.5, -1j, 1.0, 10000, False), (1.5, -1j, 1.0, 10000, True), 
-    (1.6, -1j, 1.0, 10000, False), (1.6, -1j, 1.0, 10000, True), 
-    
-    # complex potential
-    (0.1, 1.0-0.5j, 1.0, 10000, False), (0.1, 1.0-0.5j, 1.0, 10000, True), 
-    (0.2, 1.0-0.5j, 1.0, 10000, False), (0.2, 1.0-0.5j, 1.0, 10000, True), 
-    (0.3, 1.0-0.5j, 1.0, 10000, False), (0.3, 1.0-0.5j, 1.0, 10000, True), 
-    (0.4, 1.0-0.5j, 1.0, 10000, False), (0.4, 1.0-0.5j, 1.0, 10000, True), 
-    (0.5, 1.0-0.5j, 1.0, 10000, False), (0.5, 1.0-0.5j, 1.0, 10000, True), 
-    (0.6, 1.0-0.5j, 1.0, 10000, False), (0.6, 1.0-0.5j, 1.0, 10000, True), 
-    (0.7, 1.0-0.5j, 1.0, 10000, False), (0.7, 1.0-0.5j, 1.0, 10000, True), 
-    (0.8, 1.0-0.5j, 1.0, 10000, False), (0.8, 1.0-0.5j, 1.0, 10000, True), 
-    (0.9, 1.0-0.5j, 1.0, 10000, False), (0.9, 1.0-0.5j, 1.0, 10000, True), 
-    (1.0, 1.0-0.5j, 1.0, 10000, False), (1.0, 1.0-0.5j, 1.0, 10000, True), 
-    (1.1, 1.0-0.5j, 1.0, 10000, False), (1.1, 1.0-0.5j, 1.0, 10000, True), 
-    (1.2, 1.0-0.5j, 1.0, 10000, False), (1.2, 1.0-0.5j, 1.0, 10000, True), 
-    (1.3, 1.0-0.5j, 1.0, 10000, False), (1.3, 1.0-0.5j, 1.0, 10000, True), 
-    (1.4, 1.0-0.5j, 1.0, 10000, False), (1.4, 1.0-0.5j, 1.0, 10000, True), 
-    (1.5, 1.0-0.5j, 1.0, 10000, False), (1.5, 1.0-0.5j, 1.0, 10000, True), 
-    (1.6, 1.0-0.5j, 1.0, 10000, False), (1.6, 1.0-0.5j, 1.0, 10000, True), 
-])
+@pytest.mark.parametrize('e', np.arange(0.1, 1.7, 0.1))
+@pytest.mark.parametrize('v0', [1.0, -1j, 1.0-0.5j])
+@pytest.mark.parametrize('l', [1.0, ])
+@pytest.mark.parametrize('n', [10000, ])
+@pytest.mark.parametrize('left', [False, True])
+
 def test_wavefunction_rectangular_potential(e, v0, l, n, left):
     '''checks wave function for rectangular potential.'''
     
