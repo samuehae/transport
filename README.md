@@ -13,7 +13,7 @@ The package can be installed and updated via the package manager [pip](https://p
 pip install git+https://github.com/samuehae/transport.git
 
 # install package with additional dependencies for running examples
-pip install[examples] git+https://github.com/samuehae/transport.git
+pip install git+https://github.com/samuehae/transport.git#egg=transport[examples]
 ```
 
 
